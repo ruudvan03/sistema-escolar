@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite';
 import laravel from 'laravel-vite-plugin';
-import tailwindcss from '@tailwindcss/vite';
+
+// ELIMINA la línea de import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
     plugins: [
@@ -8,7 +9,7 @@ export default defineConfig({
             input: ['resources/css/app.css', 'resources/js/app.js'],
             refresh: true,
         }),
-        tailwindcss(),
+        // ELIMINA la línea de tailwindcss(),
     ],
     server: {
         watch: {
