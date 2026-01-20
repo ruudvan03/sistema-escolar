@@ -54,3 +54,17 @@ Route::middleware(['auth'])->group(function () {
         ->name('permisos.store');
 
 });
+
+Route::middleware('auth')->group(function () {
+    // Ver lista de roles
+    Route::get('/roles', [PermisoController::class, 'roles'])->name('roles.index');
+    
+    // Guardar un NUEVO rol
+    Route::post('/roles', [PermisoController::class, 'storeRole'])->name('roles.store'); // <--- NUEVA
+
+    // Ver matriz de permisos de un rol
+    Route::get('/roles/{id_rol}/permisos', [PermisoController::class, 'edit'])->name('roles.permisos');
+    
+    // Guardar permisos de un rol
+    Route::post('/roles/{id_rol}/permisos', [PermisoController::class, 'update'])->name('roles.permisos.update');
+});
