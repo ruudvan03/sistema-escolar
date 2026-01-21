@@ -89,7 +89,6 @@ class PermisoController extends Controller
         return redirect()->route('roles.index')->with('success', 'Permisos actualizados correctamente.');
     }
 
-    // Mantenemos index() por si acaso alguna ruta vieja lo usa, pero redirigimos a roles()
     public function index()
     {
         return redirect()->route('roles.index');

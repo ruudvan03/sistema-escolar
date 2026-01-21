@@ -5,7 +5,7 @@
     
     <div class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
         <div>
-            <h1 class="text-3xl font-bold text-slate-800">Roles y Perfiles</h1>
+            <h1 class="text-3xl font-bold text-slate-800">Roles y Permisos</h1>
             <p class="text-slate-500 mt-1">Administra quién tiene acceso al sistema.</p>
         </div>
         

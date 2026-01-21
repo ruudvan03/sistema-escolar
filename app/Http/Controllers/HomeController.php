@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB; // <--- Importante agregar esto
+use Illuminate\Support\Facades\DB; 
 
 class HomeController extends Controller
 {
@@ -14,7 +14,6 @@ class HomeController extends Controller
 
     public function index()
     {
-        // Obtenemos conteos rápidos usando Query Builder para no depender de Modelos aún
         $totalAlumnos = DB::table('alumnos')->count();
         $totalMaestros = DB::table('maestros')->count();
         $totalMaterias = DB::table('materias')->count();

@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PermisoController;
+use App\Http\Controllers\UserController;
 
 /*
 Landing Page (Pública)
@@ -67,4 +68,10 @@ Route::middleware('auth')->group(function () {
     
     // Guardar permisos de un rol
     Route::post('/roles/{id_rol}/permisos', [PermisoController::class, 'update'])->name('roles.permisos.update');
+});
+
+
+Route::middleware('auth')->group(function () {
+    // Módulo de Usuarios
+    Route::resource('users', UserController::class);
 });
