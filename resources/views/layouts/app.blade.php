@@ -48,20 +48,20 @@
                     Académico
                 </p>
 
+                <a href="{{ route('maestros.index') }}" class="flex items-center p-3 text-slate-300 hover:bg-slate-800 hover:text-white rounded-lg transition-colors {{ request()->routeIs('maestros.*') ? 'bg-slate-800 text-white border-l-4 border-indigo-500' : '' }}" title="Gestión de Docentes">
+                    <svg class="w-6 h-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
+                    <span class="ml-3 sidebar-text whitespace-nowrap duration-300">Docentes</span>
+                </a>
+
                 <a href="#" class="flex items-center p-3 text-slate-300 hover:bg-slate-800 hover:text-white rounded-lg transition-colors" title="Alumnos">
                     <svg class="w-6 h-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
                     <span class="ml-3 sidebar-text whitespace-nowrap duration-300">Alumnos</span>
                 </a>
                 
-                <a href="#" class="flex items-center p-3 text-slate-300 hover:bg-slate-800 hover:text-white rounded-lg transition-colors" title="Docentes">
-                    <svg class="w-6 h-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                    <span class="ml-3 sidebar-text whitespace-nowrap duration-300">Docentes</span>
-                </a>
-
                 <p class="px-4 text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2 mt-6 sidebar-header whitespace-nowrap transition-opacity duration-300">
                     Administración
                 </p>
-                
+
                 <a href="{{ route('users.index') }}" class="flex items-center p-3 text-slate-300 hover:bg-slate-800 hover:text-white rounded-lg transition-colors {{ request()->routeIs('users.*') ? 'bg-slate-800 text-white border-l-4 border-blue-500' : '' }}" title="Gestión de Usuarios">
                     <svg class="w-6 h-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
                     <span class="ml-3 sidebar-text whitespace-nowrap duration-300">Usuarios</span>
@@ -170,7 +170,7 @@
         const userMenuDropdown = document.getElementById('userMenuDropdown');
         const userMenuIcon = document.getElementById('userMenuIcon');
 
-        // Logica del sidebar
+        // --- LÓGICA DEL SIDEBAR ---
         let isCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
 
         function updateSidebarState() {
@@ -207,7 +207,7 @@
             });
         }
 
-        // Logica menu usuario
+        // --- LÓGICA DEL MENÚ USUARIO (CLICK) ---
         if (userMenuBtn) {
             userMenuBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
@@ -215,7 +215,7 @@
                 userMenuIcon.classList.toggle('rotate-180');
             });
 
-            // Cerrar 
+            // Cerrar al hacer clic fuera (Sidebar y User Menu)
             document.addEventListener('click', (e) => {
                 // Sidebar móvil
                 if (window.innerWidth < 768) { 
@@ -223,7 +223,7 @@
                         sidebar.classList.add('-translate-x-full');
                     }
                 }
-                // Menu Usuario
+                // Menú Usuario
                 if (!userMenuDropdown.classList.contains('hidden')) {
                     if (!userMenuDropdown.contains(e.target) && !userMenuBtn.contains(e.target)) {
                         userMenuDropdown.classList.add('hidden');

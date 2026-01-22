@@ -5,73 +5,36 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PermisoController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\MaestroController;
 
-/*
-Landing Page (Pública)
-*/
+
+
+// Página Pública (Landing)
 Route::get('/', function () {
     return view('landing');
 })->name('landing');
 
-/*
-Autenticación (SIN REGISTRO)
-*/
-Auth::routes([
-    'register' => false,
-]);
+//Autenticación
+// Desactivamos el registro público para que solo el admin cree usuarios
+Auth::routes(['register' => false]);
 
-/*
-Dashboard (Protegido)
-*/
-Route::get('/dashboard', [HomeController::class, 'index'])
-    ->middleware('auth')
-    ->name('dashboard');
-
-
-/*
-Gestión de Roles y Permisos (Protegido)
-*/
-Route::middleware('auth')->group(function () {
-
-    // Lista de roles
-    Route::get('/roles', [PermisoController::class, 'roles'])
-        ->name('roles.index');
-
-    // Permisos por rol
-    Route::get('/roles/{id_rol}/permisos', [PermisoController::class, 'edit'])
-        ->name('roles.permisos');
-
-    // Guardar permisos
-    Route::post('/roles/{id_rol}/permisos', [PermisoController::class, 'update'])
-        ->name('roles.permisos.update');
-});
-
+// Rutas Protegidas (Requieren Login)
 Route::middleware(['auth'])->group(function () {
+    
+    // 1. Dashboard
+    Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
+    Route::get('/home', [HomeController::class, 'index'])->name('home'); // Redirección estándar
 
-    Route::get('/permisos', [PermisoController::class, 'index'])
-        ->name('permisos.index');
-
-    Route::post('/permisos', [PermisoController::class, 'store'])
-        ->name('permisos.store');
-
-});
-
-Route::middleware('auth')->group(function () {
-    // Ver lista de roles
+    // 2. Módulo de Roles y Permisos
     Route::get('/roles', [PermisoController::class, 'roles'])->name('roles.index');
-    
-    // Guardar un NUEVO rol
-    Route::post('/roles', [PermisoController::class, 'storeRole'])->name('roles.store'); // <--- NUEVA
-
-    // Ver matriz de permisos de un rol
+    Route::post('/roles', [PermisoController::class, 'storeRole'])->name('roles.store');
     Route::get('/roles/{id_rol}/permisos', [PermisoController::class, 'edit'])->name('roles.permisos');
-    
-    // Guardar permisos de un rol
     Route::post('/roles/{id_rol}/permisos', [PermisoController::class, 'update'])->name('roles.permisos.update');
-});
 
-
-Route::middleware('auth')->group(function () {
-    // Módulo de Usuarios
+    // 3. Módulo de Usuarios
     Route::resource('users', UserController::class);
+
+    // 4. Módulo de Docentes (Maestros)
+    Route::resource('maestros', MaestroController::class);
+
 });
