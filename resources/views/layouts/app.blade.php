@@ -170,7 +170,7 @@
         const userMenuDropdown = document.getElementById('userMenuDropdown');
         const userMenuIcon = document.getElementById('userMenuIcon');
 
-        // --- LÓGICA DEL SIDEBAR ---
+        // LÓGICA DEL SIDEBAR 
         let isCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
 
         function updateSidebarState() {
@@ -207,7 +207,7 @@
             });
         }
 
-        // --- LÓGICA DEL MENÚ USUARIO (CLICK) ---
+        // LÓGICA DEL MENÚ USUARIO 
         if (userMenuBtn) {
             userMenuBtn.addEventListener('click', (e) => {
                 e.stopPropagation();

@@ -35,7 +35,7 @@ class AlumnoController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'matricula' => 'required|string|max:20|unique:alumnos,matricula',
+            'matricula' => 'required|string|max:10|unique:alumnos,matricula',
             'nombre' => 'required|string|max:255',
             'apellido_p' => 'required|string|max:255',
             'apellido_m' => 'required|string|max:255',
@@ -49,12 +49,10 @@ class AlumnoController extends Controller
         try {
             DB::transaction(function () use ($request) {
                 
-                // --- AQUÍ ESTÁ EL CAMBIO ---
-                // Buscamos el rol exacto "Alumno/Tutor"
+                
+                // Buscamos el rol "Alumno/Tutor"
                 $rolAlumno = Role::where('nombre_rol', 'Alumno/Tutor')->first();
                 
-                // Si no lo encuentra, probamos buscar solo "Alumno" por si acaso, 
-                // o lanzamos el error directamente.
                 if (!$rolAlumno) {
                     $rolAlumno = Role::where('nombre_rol', 'Alumno')->first();
                 }

@@ -6,14 +6,12 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Maestro;
 use App\Models\Alumno; 
-// use App\Models\Materia; // Descomenta cuando tengas el modelo Materia
-use Illuminate\Support\Facades\DB; // Lo dejamos por si acaso usas DB directas
+// use App\Models\Materia; 
+use Illuminate\Support\Facades\DB; 
 
 class HomeController extends Controller
 {
     /**
-     * Create a new controller instance.
-     *
      * @return void
      */
     public function __construct()

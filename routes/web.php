@@ -44,7 +44,6 @@ Route::middleware(['auth'])->group(function () {
 });
 
 // --- RUTA DE LOGOUT (SALIDA) ---
-// La definimos manualmente para asegurar que redirija al inicio y limpie la sesión
 Route::post('/logout', function (Request $request) {
     Auth::logout();
     $request->session()->invalidate();
