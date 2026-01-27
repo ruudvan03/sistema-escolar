@@ -57,6 +57,11 @@
                     <svg class="w-6 h-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"></path></svg>
                     <span class="ml-3 sidebar-text whitespace-nowrap duration-300">Alumnos</span>
                 </a>
+
+                <a href="{{ route('materias.index') }}" class="flex items-center p-3 text-slate-300 hover:bg-slate-800 hover:text-white rounded-lg transition-colors {{ request()->routeIs('materias.*') ? 'bg-slate-800 text-white border-l-4 border-teal-500' : '' }}" title="Gestión de Materias">
+                    <svg class="w-6 h-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                    <span class="ml-3 sidebar-text whitespace-nowrap duration-300">Materias</span>
+                </a>
                 
                 <p class="px-4 text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2 mt-6 sidebar-header whitespace-nowrap transition-opacity duration-300">
                     Administración

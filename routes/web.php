@@ -8,6 +8,7 @@ use App\Http\Controllers\PermisoController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\MaestroController;
 use App\Http\Controllers\AlumnoController; 
+use App\Http\Controllers\MateriaController;
 
 
 // Página Pública (Landing)
@@ -41,6 +42,8 @@ Route::middleware(['auth'])->group(function () {
     // 5. Módulo de Alumnos (NUEVO)
     Route::resource('alumnos', AlumnoController::class);
 
+    // 6. Módulo de Materias
+    Route::resource('materias', MateriaController::class);
 });
 
 // --- RUTA DE LOGOUT (SALIDA) ---
