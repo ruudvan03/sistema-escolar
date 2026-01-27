@@ -12,4 +12,10 @@ class Grado extends Model
     protected $table = 'grados';
     protected $primaryKey = 'id_grado';
     protected $fillable = ['nombre_grado']; 
+
+    // Relación: Un grado tiene muchas materias
+    public function materias()
+    {
+        return $this->hasMany(Materia::class, 'id_grado', 'id_grado');
+    }
 }

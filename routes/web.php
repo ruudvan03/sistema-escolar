@@ -9,6 +9,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\MaestroController;
 use App\Http\Controllers\AlumnoController; 
 use App\Http\Controllers\MateriaController;
+use App\Http\Controllers\GradoController;
 
 
 // Página Pública (Landing)
@@ -44,6 +45,9 @@ Route::middleware(['auth'])->group(function () {
 
     // 6. Módulo de Materias
     Route::resource('materias', MateriaController::class);
+
+    // 7. Módulo de Grados
+    Route::resource('grados', GradoController::class);
 });
 
 // --- RUTA DE LOGOUT (SALIDA) ---

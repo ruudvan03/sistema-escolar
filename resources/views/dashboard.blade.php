@@ -20,14 +20,14 @@
         </div>
     </div>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
         
         <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 flex items-center transition-all hover:shadow-md">
             <div class="p-3 rounded-lg bg-blue-50 text-blue-600 mr-4">
                 <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
             </div>
             <div>
-                <p class="text-sm font-medium text-slate-500">Total Alumnos</p>
+                <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Alumnos</p>
                 <p class="text-2xl font-bold text-slate-800">{{ $totalAlumnos ?? 0 }}</p>
             </div>
         </div>
@@ -37,7 +37,7 @@
                 <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
             </div>
             <div>
-                <p class="text-sm font-medium text-slate-500">Docentes</p>
+                <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Docentes</p>
                 <p class="text-2xl font-bold text-slate-800">{{ $totalMaestros ?? 0 }}</p>
             </div>
         </div>
@@ -47,8 +47,18 @@
                 <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
             </div>
             <div>
-                <p class="text-sm font-medium text-slate-500">Materias</p>
+                <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Materias</p>
                 <p class="text-2xl font-bold text-slate-800">{{ $totalMaterias ?? 0 }}</p>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 flex items-center transition-all hover:shadow-md">
+            <div class="p-3 rounded-lg bg-purple-50 text-purple-600 mr-4">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+            </div>
+            <div>
+                <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Grados</p>
+                <p class="text-2xl font-bold text-slate-800">{{ $totalGrados ?? 0 }}</p>
             </div>
         </div>
 
@@ -57,7 +67,7 @@
                 <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
             </div>
             <div>
-                <p class="text-sm font-medium text-slate-500">Usuarios</p>
+                <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Usuarios</p>
                 <p class="text-2xl font-bold text-slate-800">{{ $totalUsuarios ?? 0 }}</p>
             </div>
         </div>
@@ -69,7 +79,7 @@
             <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
                 <h3 class="text-lg font-bold text-slate-800 mb-4">Módulos del Sistema</h3>
                 
-                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4">
                     
                     <a href="{{ route('alumnos.index') }}" class="group flex flex-col items-center p-4 rounded-xl border border-slate-100 bg-slate-50 hover:bg-blue-50 hover:border-blue-200 transition-all cursor-pointer">
                         <div class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-blue-600 shadow-sm mb-3 group-hover:scale-110 transition-transform">
@@ -91,6 +101,13 @@
                         </div>
                         <span class="text-sm font-medium text-slate-600 group-hover:text-teal-700 text-center">Materias</span>
                     </a>
+                    
+                    <a href="{{ route('grados.index') }}" class="group flex flex-col items-center p-4 rounded-xl border border-slate-100 bg-slate-50 hover:bg-purple-50 hover:border-purple-200 transition-all cursor-pointer">
+                        <div class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-purple-600 shadow-sm mb-3 group-hover:scale-110 transition-transform">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+                        </div>
+                        <span class="text-sm font-medium text-slate-600 group-hover:text-purple-700 text-center">Grados</span>
+                    </a>
 
                     <a href="{{ route('users.index') }}" class="group flex flex-col items-center p-4 rounded-xl border border-slate-100 bg-slate-50 hover:bg-orange-50 hover:border-orange-200 transition-all cursor-pointer">
                         <div class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-orange-600 shadow-sm mb-3 group-hover:scale-110 transition-transform">
@@ -99,11 +116,11 @@
                         <span class="text-sm font-medium text-slate-600 group-hover:text-orange-700 text-center">Usuarios</span>
                     </a>
 
-                    <a href="{{ route('roles.index') }}" class="group flex flex-col items-center p-4 rounded-xl border border-slate-100 bg-slate-50 hover:bg-purple-50 hover:border-purple-200 transition-all cursor-pointer">
-                        <div class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-blue-600 shadow-sm mb-3 group-hover:scale-110 transition-transform">
+                    <a href="{{ route('roles.index') }}" class="group flex flex-col items-center p-4 rounded-xl border border-slate-100 bg-slate-50 hover:bg-gray-50 hover:border-gray-200 transition-all cursor-pointer">
+                        <div class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-gray-600 shadow-sm mb-3 group-hover:scale-110 transition-transform">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
                         </div>
-                        <span class="text-sm font-medium text-slate-600 group-hover:text-blue-700 text-center">Roles</span>
+                        <span class="text-sm font-medium text-slate-600 group-hover:text-gray-700 text-center">Roles</span>
                     </a>
 
                 </div>
@@ -129,12 +146,6 @@
                                 <td class="px-6 py-3">9no A</td>
                                 <td class="px-6 py-3"><span class="bg-green-100 text-green-700 px-2 py-1 rounded-full text-xs">Activo</span></td>
                                 <td class="px-6 py-3 text-slate-400">Hoy</td>
-                            </tr>
-                            <tr class="hover:bg-slate-50">
-                                <td class="px-6 py-3 font-medium text-slate-900">Ana García</td>
-                                <td class="px-6 py-3">1ro B</td>
-                                <td class="px-6 py-3"><span class="bg-yellow-100 text-yellow-700 px-2 py-1 rounded-full text-xs">Pendiente</span></td>
-                                <td class="px-6 py-3 text-slate-400">Ayer</td>
                             </tr>
                         </tbody>
                     </table>
