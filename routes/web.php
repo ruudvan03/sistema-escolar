@@ -2,11 +2,12 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request; 
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PermisoController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\MaestroController;
-
+use App\Http\Controllers\AlumnoController; 
 
 
 // Página Pública (Landing)
@@ -14,16 +15,16 @@ Route::get('/', function () {
     return view('landing');
 })->name('landing');
 
-//Autenticación
-// Desactivamos el registro público para que solo el admin cree usuarios
+// Autenticación 
+// 'register' => false impide que gente externa se registre sola
 Auth::routes(['register' => false]);
 
-// Rutas Protegidas (Requieren Login)
+// --- RUTAS PROTEGIDAS (SISTEMA) ---
 Route::middleware(['auth'])->group(function () {
     
     // 1. Dashboard
     Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
-    Route::get('/home', [HomeController::class, 'index'])->name('home'); // Redirección estándar
+    Route::get('/home', [HomeController::class, 'index'])->name('home');
 
     // 2. Módulo de Roles y Permisos
     Route::get('/roles', [PermisoController::class, 'roles'])->name('roles.index');
@@ -37,4 +38,16 @@ Route::middleware(['auth'])->group(function () {
     // 4. Módulo de Docentes (Maestros)
     Route::resource('maestros', MaestroController::class);
 
+    // 5. Módulo de Alumnos (NUEVO)
+    Route::resource('alumnos', AlumnoController::class);
+
 });
+
+// --- RUTA DE LOGOUT (SALIDA) ---
+// La definimos manualmente para asegurar que redirija al inicio y limpie la sesión
+Route::post('/logout', function (Request $request) {
+    Auth::logout();
+    $request->session()->invalidate();
+    $request->session()->regenerateToken();
+    return redirect('/'); // Redirige a la Landing Page
+})->name('logout');

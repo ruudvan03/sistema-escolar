@@ -53,8 +53,8 @@
                     <span class="ml-3 sidebar-text whitespace-nowrap duration-300">Docentes</span>
                 </a>
 
-                <a href="#" class="flex items-center p-3 text-slate-300 hover:bg-slate-800 hover:text-white rounded-lg transition-colors" title="Alumnos">
-                    <svg class="w-6 h-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                <a href="{{ route('alumnos.index') }}" class="flex items-center p-3 text-slate-300 hover:bg-slate-800 hover:text-white rounded-lg transition-colors {{ request()->routeIs('alumnos.*') ? 'bg-slate-800 text-white border-l-4 border-blue-500' : '' }}" title="Gestión de Alumnos">
+                    <svg class="w-6 h-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"></path></svg>
                     <span class="ml-3 sidebar-text whitespace-nowrap duration-300">Alumnos</span>
                 </a>
                 
@@ -215,15 +215,13 @@
                 userMenuIcon.classList.toggle('rotate-180');
             });
 
-            // Cerrar al hacer clic fuera (Sidebar y User Menu)
+            // Cerrar al hacer clic fuera
             document.addEventListener('click', (e) => {
-                // Sidebar móvil
                 if (window.innerWidth < 768) { 
                     if (!sidebar.contains(e.target) && !mobileBtn.contains(e.target) && !sidebar.classList.contains('-translate-x-full')) {
                         sidebar.classList.add('-translate-x-full');
                     }
                 }
-                // Menú Usuario
                 if (!userMenuDropdown.classList.contains('hidden')) {
                     if (!userMenuDropdown.contains(e.target) && !userMenuBtn.contains(e.target)) {
                         userMenuDropdown.classList.add('hidden');
