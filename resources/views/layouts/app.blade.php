@@ -40,52 +40,89 @@
                 </p>
                 
                 <a href="{{ route('dashboard') }}" class="flex items-center p-3 text-slate-300 hover:bg-slate-800 hover:text-white rounded-lg transition-colors {{ request()->routeIs('dashboard') ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/30' : '' }}" title="Dashboard">
-                    <svg class="w-6 h-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+                    <svg class="w-6 h-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
                     <span class="ml-3 sidebar-text whitespace-nowrap duration-300">Dashboard</span>
                 </a>
 
-                <p class="px-4 text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2 mt-6 sidebar-header whitespace-nowrap transition-opacity duration-300">
-                    Académico
-                </p>
+                @if(Auth::user()->hasRole('Administrador'))
 
-                <a href="{{ route('maestros.index') }}" class="flex items-center p-3 text-slate-300 hover:bg-slate-800 hover:text-white rounded-lg transition-colors {{ request()->routeIs('maestros.*') ? 'bg-slate-800 text-white border-l-4 border-indigo-500' : '' }}" title="Gestión de Docentes">
-                    <svg class="w-6 h-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
-                    <span class="ml-3 sidebar-text whitespace-nowrap duration-300">Docentes</span>
-                </a>
+                    <p class="px-4 text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2 mt-6 sidebar-header whitespace-nowrap transition-opacity duration-300">
+                        Académico
+                    </p>
 
-                <a href="{{ route('alumnos.index') }}" class="flex items-center p-3 text-slate-300 hover:bg-slate-800 hover:text-white rounded-lg transition-colors {{ request()->routeIs('alumnos.*') ? 'bg-slate-800 text-white border-l-4 border-blue-500' : '' }}" title="Gestión de Alumnos">
-                    <svg class="w-6 h-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"></path></svg>
-                    <span class="ml-3 sidebar-text whitespace-nowrap duration-300">Alumnos</span>
-                </a>
+                    <a href="{{ route('maestros.index') }}" class="flex items-center p-3 text-slate-300 hover:bg-slate-800 hover:text-white rounded-lg transition-colors {{ request()->routeIs('maestros.*') ? 'bg-slate-800 text-white border-l-4 border-indigo-500' : '' }}" title="Gestión de Docentes">
+                        <svg class="w-6 h-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
+                        <span class="ml-3 sidebar-text whitespace-nowrap duration-300">Docentes</span>
+                    </a>
 
-                <a href="{{ route('materias.index') }}" class="flex items-center p-3 text-slate-300 hover:bg-slate-800 hover:text-white rounded-lg transition-colors {{ request()->routeIs('materias.*') ? 'bg-slate-800 text-white border-l-4 border-teal-500' : '' }}" title="Gestión de Materias">
-                    <svg class="w-6 h-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
-                    <span class="ml-3 sidebar-text whitespace-nowrap duration-300">Materias</span>
-                </a>
+                    <a href="{{ route('alumnos.index') }}" class="flex items-center p-3 text-slate-300 hover:bg-slate-800 hover:text-white rounded-lg transition-colors {{ request()->routeIs('alumnos.*') ? 'bg-slate-800 text-white border-l-4 border-blue-500' : '' }}" title="Gestión de Alumnos">
+                        <svg class="w-6 h-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"></path></svg>
+                        <span class="ml-3 sidebar-text whitespace-nowrap duration-300">Alumnos</span>
+                    </a>
 
-                <a href="{{ route('grados.index') }}" class="flex items-center p-3 text-slate-300 hover:bg-slate-800 hover:text-white rounded-lg transition-colors {{ request()->routeIs('grados.*') ? 'bg-slate-800 text-white border-l-4 border-purple-500' : '' }}" title="Grados">
-                    <svg class="w-6 h-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
-                    <span class="ml-3 sidebar-text whitespace-nowrap duration-300">Grados</span>
-                </a>
-                
-                <p class="px-4 text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2 mt-6 sidebar-header whitespace-nowrap transition-opacity duration-300">
-                    Administración
-                </p>
+                    <a href="{{ route('materias.index') }}" class="flex items-center p-3 text-slate-300 hover:bg-slate-800 hover:text-white rounded-lg transition-colors {{ request()->routeIs('materias.*') ? 'bg-slate-800 text-white border-l-4 border-teal-500' : '' }}" title="Gestión de Materias">
+                        <svg class="w-6 h-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                        <span class="ml-3 sidebar-text whitespace-nowrap duration-300">Materias</span>
+                    </a>
 
-                <a href="{{ route('users.index') }}" class="flex items-center p-3 text-slate-300 hover:bg-slate-800 hover:text-white rounded-lg transition-colors {{ request()->routeIs('users.*') ? 'bg-slate-800 text-white border-l-4 border-blue-500' : '' }}" title="Gestión de Usuarios">
-                    <svg class="w-6 h-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
-                    <span class="ml-3 sidebar-text whitespace-nowrap duration-300">Usuarios</span>
-                </a>
+                    <a href="{{ route('grados.index') }}" class="flex items-center p-3 text-slate-300 hover:bg-slate-800 hover:text-white rounded-lg transition-colors {{ request()->routeIs('grados.*') ? 'bg-slate-800 text-white border-l-4 border-purple-500' : '' }}" title="Grados">
+                        <svg class="w-6 h-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+                        <span class="ml-3 sidebar-text whitespace-nowrap duration-300">Grados</span>
+                    </a>
 
-                <a href="{{ route('roles.index') }}" class="flex items-center p-3 text-slate-300 hover:bg-slate-800 hover:text-white rounded-lg transition-colors {{ request()->routeIs('roles.*') ? 'bg-slate-800 text-white border-l-4 border-blue-500' : '' }}" title="Roles y Permisos">
-                    <svg class="w-6 h-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
-                    <span class="ml-3 sidebar-text whitespace-nowrap duration-300">Roles y Permisos</span>
-                </a>
 
-                <a href="#" class="flex items-center p-3 text-slate-300 hover:bg-slate-800 hover:text-white rounded-lg transition-colors" title="Configuración">
-                    <svg class="w-6 h-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                    <span class="ml-3 sidebar-text whitespace-nowrap duration-300">Configuración</span>
-                </a>
+                    
+                    <p class="px-4 text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2 mt-6 sidebar-header whitespace-nowrap transition-opacity duration-300">
+                        Administración
+                    </p>
+
+                    <a href="{{ route('users.index') }}" class="flex items-center p-3 text-slate-300 hover:bg-slate-800 hover:text-white rounded-lg transition-colors {{ request()->routeIs('users.*') ? 'bg-slate-800 text-white border-l-4 border-orange-500' : '' }}" title="Gestión de Usuarios">
+                        <svg class="w-6 h-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                        <span class="ml-3 sidebar-text whitespace-nowrap duration-300">Usuarios</span>
+                    </a>
+
+                    <a href="{{ route('roles.index') }}" class="flex items-center p-3 text-slate-300 hover:bg-slate-800 hover:text-white rounded-lg transition-colors {{ request()->routeIs('roles.*') ? 'bg-slate-800 text-white border-l-4 border-pink-500' : '' }}" title="Roles y Permisos">
+                        <svg class="w-6 h-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                        <span class="ml-3 sidebar-text whitespace-nowrap duration-300">Roles y Permisos</span>
+                    </a>
+
+                @endif
+
+                @if(Auth::user()->hasAnyRole(['Administrador', 'Maestro']))
+                    
+                    <p class="px-4 text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2 mt-6 sidebar-header whitespace-nowrap transition-opacity duration-300">
+                        Gestión Escolar
+                    </p>
+
+                    <a href="{{ route('asistencias.index') }}" class="flex items-center p-3 text-slate-300 hover:bg-slate-800 hover:text-white rounded-lg transition-colors {{ request()->routeIs('asistencias.*') ? 'bg-slate-800 text-white border-l-4 border-green-500' : '' }}" title="Asistencias">
+                        <svg class="w-6 h-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
+                        <span class="ml-3 sidebar-text whitespace-nowrap duration-300">Asistencias</span>
+                    </a>
+
+                    <a href="{{ route('inscripciones.index') }}" class="flex items-center p-3 text-slate-300 hover:bg-slate-800 hover:text-white rounded-lg transition-colors {{ request()->routeIs('inscripciones.*') ? 'bg-slate-800 text-white border-l-4 border-emerald-500' : '' }}">
+                        <svg class="w-6 h-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 5h1m-1 4h1m-1 4h1m-1 4h1m-5 10H3a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2v16a2 2 0 01-2 2h-1"></path></svg>
+                        <span class="ml-3 sidebar-text">Inscripciones</span>
+                    </a>
+                    
+                @endif
+
+                @if(Auth::user()->hasRole('Alumno/Tutor'))
+                    
+                    <p class="px-4 text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2 mt-6 sidebar-header whitespace-nowrap transition-opacity duration-300">
+                        Mi Información
+                    </p>
+
+                    <a href="#" class="flex items-center p-3 text-slate-300 hover:bg-slate-800 hover:text-white rounded-lg transition-colors">
+                        <svg class="w-6 h-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
+                        <span class="ml-3 sidebar-text whitespace-nowrap duration-300">Mi Boleta</span>
+                    </a>
+                    
+                    <a href="#" class="flex items-center p-3 text-slate-300 hover:bg-slate-800 hover:text-white rounded-lg transition-colors">
+                        <svg class="w-6 h-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        <span class="ml-3 sidebar-text whitespace-nowrap duration-300">Mi Horario</span>
+                    </a>
+
+                @endif
 
             </nav>
 
@@ -99,6 +136,7 @@
         </aside>
 
         <div class="flex-1 flex flex-col min-h-screen transition-all duration-300">
+            
             <header class="bg-white shadow-sm border-b border-slate-200 h-16 flex items-center justify-between px-4 sm:px-6 lg:px-8 z-40 sticky top-0">
                 <button id="sidebarToggle" class="md:hidden text-slate-500 hover:text-slate-700 focus:outline-none">
                     <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -113,13 +151,6 @@
                 </div>
 
                 <div class="flex items-center gap-4">
-                    <button class="text-slate-400 hover:text-blue-600 relative">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
-                        <span class="absolute top-0 right-0 block h-2 w-2 rounded-full bg-red-500 ring-2 ring-white"></span>
-                    </button>
-                    
-                    <div class="border-l border-slate-200 h-6 mx-2"></div>
-                    
                     <div class="relative"> 
                         @guest
                             <a href="{{ route('login') }}" class="text-sm font-medium text-slate-600">Login</a>
@@ -175,7 +206,6 @@
         const texts = document.querySelectorAll('.sidebar-text');
         const headers = document.querySelectorAll('.sidebar-header');
 
-        // Variables menú usuario
         const userMenuBtn = document.getElementById('userMenuBtn');
         const userMenuDropdown = document.getElementById('userMenuDropdown');
         const userMenuIcon = document.getElementById('userMenuIcon');
@@ -217,7 +247,6 @@
             });
         }
 
-        // LÓGICA DEL MENÚ USUARIO 
         if (userMenuBtn) {
             userMenuBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
@@ -225,7 +254,6 @@
                 userMenuIcon.classList.toggle('rotate-180');
             });
 
-            // Cerrar al hacer clic fuera
             document.addEventListener('click', (e) => {
                 if (window.innerWidth < 768) { 
                     if (!sidebar.contains(e.target) && !mobileBtn.contains(e.target) && !sidebar.classList.contains('-translate-x-full')) {

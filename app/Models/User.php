@@ -20,7 +20,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'id_rol', // <--- AGREGADO: Para poder guardar el rol al crear usuario
+        'id_rol', // <--- Importante
     ];
 
     /**
@@ -53,5 +53,31 @@ class User extends Authenticatable
     {
         // belongsTo(Modelo, 'llave_foranea_en_users', 'llave_primaria_en_roles')
         return $this->belongsTo(Role::class, 'id_rol', 'id_rol');
+    }
+
+    // ==========================================
+    //  FUNCIONES DE PERMISOS (¡ESTO FALTABA!)
+    // ==========================================
+
+    /**
+     * Verifica si el usuario tiene un rol específico.
+     */
+    public function hasRole($roleName)
+    {
+        if (!$this->rol) {
+            return false;
+        }
+        return $this->rol->nombre_rol === $roleName;
+    }
+
+    /**
+     * Verifica si el usuario tiene CUALQUIERA de los roles en la lista.
+     */
+    public function hasAnyRole(array $roles)
+    {
+        if (!$this->rol) {
+            return false;
+        }
+        return in_array($this->rol->nombre_rol, $roles);
     }
 }
