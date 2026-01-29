@@ -12,6 +12,7 @@ use App\Http\Controllers\MateriaController;
 use App\Http\Controllers\GradoController;
 use App\Http\Controllers\AsistenciaController;
 use App\Http\Controllers\InscripcionController;
+use App\Http\Controllers\GrupoController;
 
 // --- 1. RUTA PÚBLICA (Landing) ---
 Route::get('/', function () {
@@ -49,7 +50,8 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('materias', MateriaController::class);
         Route::resource('grados', GradoController::class);
         Route::resource('inscripciones', InscripcionController::class);
-    });
+        Route::resource('grupos', GrupoController::class);    
+        });
 
     // =========================================================
     //    ZONA COMPARTIDA (Administradores y Maestros)
