@@ -13,13 +13,6 @@ use App\Http\Controllers\GradoController;
 use App\Http\Controllers\AsistenciaController;
 use App\Http\Controllers\InscripcionController;
 
-
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-*/
-
 // --- 1. RUTA PÚBLICA (Landing) ---
 Route::get('/', function () {
     return view('landing');
@@ -69,7 +62,6 @@ Route::middleware(['auth'])->group(function () {
         
         // Aún no hemos creado este controlador, pero dejaremos la ruta lista
         // para cuando hagamos el paso de calificaciones.
-        // Si te da error "Class not found", comenta esta línea temporalmente:
         // Route::resource('calificaciones', CalificacionController::class);
     });
 

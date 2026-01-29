@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Asistencia;
 use App\Models\Inscripcion;
-use App\Models\Grupo; // <--- Usamos Grupo en lugar de Materia
+use App\Models\Grupo; 
 use Illuminate\Http\Request;
 
 class AsistenciaController extends Controller
@@ -31,7 +31,7 @@ class AsistenciaController extends Controller
         // 2. Si seleccionó grupo, buscamos por id_grupo en inscripciones
         if ($grupo_id) {
             $inscripciones = Inscripcion::with('alumno')
-                            ->where('id_grupo', $grupo_id) // <--- CORRECCIÓN CLAVE
+                            ->where('id_grupo', $grupo_id) 
                             ->get();
         }
 

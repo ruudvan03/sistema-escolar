@@ -20,7 +20,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'id_rol', // <--- Importante
+        'id_rol', 
     ];
 
     /**
@@ -56,7 +56,7 @@ class User extends Authenticatable
     }
 
     // ==========================================
-    //  FUNCIONES DE PERMISOS (¡ESTO FALTABA!)
+    //  FUNCIONES DE PERMISOS 
     // ==========================================
 
     /**

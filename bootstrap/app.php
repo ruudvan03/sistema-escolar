@@ -12,13 +12,10 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         
-        // --- CORRECCIÓN: El alias debe ir AQUÍ DENTRO ---
         $middleware->alias([
             'role' => \App\Http\Middleware\CheckRole::class,
         ]);
-        // ------------------------------------------------
 
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        //
     })->create();

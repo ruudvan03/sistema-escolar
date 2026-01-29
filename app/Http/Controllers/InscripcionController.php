@@ -19,7 +19,7 @@ class InscripcionController extends Controller
     public function create()
     {
         $alumnos = Alumno::where('estatus', 'Activo')->get();
-        $grupos = Grupo::all(); // Asegúrate de tener el modelo Grupo
+        $grupos = Grupo::all(); 
         return view('inscripciones.create', compact('alumnos', 'grupos'));
     }
 
