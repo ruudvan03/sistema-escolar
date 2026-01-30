@@ -13,14 +13,18 @@ class Grupo extends Model
     protected $primaryKey = 'id_grupo';
 
     protected $fillable = [
+        'id_grado',
         'nombre_grupo',
         'turno',
-        'id_grado'
+        'estatus'
     ];
 
-    // Relación: Un grupo pertenece a un grado
-    public function grado()
-    {
+    public function grado() {
         return $this->belongsTo(Grado::class, 'id_grado', 'id_grado');
+    }
+
+    // RELACIÓN AÑADIDA: Conecta el grupo con sus materias/maestros asignados
+    public function asignaciones() {
+        return $this->hasMany(AsignacionDocente::class, 'id_grupo', 'id_grupo');
     }
 }

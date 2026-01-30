@@ -23,33 +23,15 @@ class Calificacion extends Model
         'calificacion' => 'decimal:2',
     ];
 
-    public function inscripcion()
-    {
+    public function inscripcion() {
         return $this->belongsTo(Inscripcion::class, 'id_inscripcion', 'id_inscripcion');
     }
 
-
-    public function parcial()
-    {
+    public function parcial() {
         return $this->belongsTo(Parcial::class, 'id_parcial', 'id_parcial');
     }
 
-
-    public function asignacion()
-    {
-        return $this->belongsTo(Asignacion::class, 'id_asignacion', 'id_asignacion');
-    }
-
-
-    public function materia()
-    {
-        return $this->hasOneThrough(
-            Materia::class, 
-            Asignacion::class, 
-            'id_asignacion', // FK en Asignacion
-            'id_materia',    // FK en Materia
-            'id_asignacion', // Local key en Calificacion
-            'id_materia'     // Local key en Asignacion
-        );
+    public function asignacion() {
+        return $this->belongsTo(AsignacionDocente::class, 'id_asignacion', 'id_asignacion');
     }
 }

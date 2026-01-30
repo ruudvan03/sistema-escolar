@@ -63,6 +63,9 @@ Route::middleware(['auth'])->group(function () {
         // Control Operativo
         Route::resource('inscripciones', InscripcionController::class);
         Route::resource('asignaciones', AsignacionDocenteController::class);
+
+        // Gestión de Estados de Parciales (Añadido para el control de periodos)
+        Route::post('/parciales/{id}/toggle-status', [CalificacionController::class, 'toggleParcialStatus'])->name('parciales.toggle');
     });
 
     // =========================================================
@@ -84,6 +87,9 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['role:Alumno/Tutor'])->group(function () {
         // Consulta de Boleta Digital (Progreso hacia los 18 puntos)
         Route::get('/mi-boleta', [CalificacionController::class, 'showStudentBoleta'])->name('alumno.boleta');
+        
+        // Descarga de Boleta en PDF (Añadido para reportes oficiales)
+        Route::get('/mi-boleta/descargar', [CalificacionController::class, 'downloadBoletaPDF'])->name('alumno.boleta.pdf');
     });
 
 });

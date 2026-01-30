@@ -19,7 +19,6 @@ class Inscripcion extends Model
         'estatus'
     ];
 
-    // RELACIONES EXISTENTES
     public function alumno() {
         return $this->belongsTo(Alumno::class, 'id_alumno', 'id_alumno');
     }
@@ -28,9 +27,22 @@ class Inscripcion extends Model
         return $this->belongsTo(Grupo::class, 'id_grupo', 'id_grupo');
     }
 
-    // NUEVAS RELACIONES NECESARIAS
     public function calificaciones() {
-        // Una inscripción tiene muchos registros de calificación (P1, P2, P3)
         return $this->hasMany(Calificacion::class, 'id_inscripcion', 'id_inscripcion');
+    }
+
+    /**
+     * Obtiene la materia vinculada a la inscripción a través de las asignaciones del grupo.
+     */
+    public function materia()
+    {
+        return $this->hasOneThrough(
+            Materia::class,
+            AsignacionDocente::class,
+            'id_grupo',    // FK en AsignacionDocente
+            'id_materia',  // FK en Materia
+            'id_grupo',    // Llave local en Inscripcion
+            'id_materia'   // Llave local en AsignacionDocente
+        );
     }
 }
