@@ -19,15 +19,18 @@ class Inscripcion extends Model
         'estatus'
     ];
 
-    // Relación con Alumno
-    public function alumno()
-    {
+    // RELACIONES EXISTENTES
+    public function alumno() {
         return $this->belongsTo(Alumno::class, 'id_alumno', 'id_alumno');
     }
 
-    // Relación con Grupo
-    public function grupo()
-    {
+    public function grupo() {
         return $this->belongsTo(Grupo::class, 'id_grupo', 'id_grupo');
+    }
+
+    // NUEVAS RELACIONES NECESARIAS
+    public function calificaciones() {
+        // Una inscripción tiene muchos registros de calificación (P1, P2, P3)
+        return $this->hasMany(Calificacion::class, 'id_inscripcion', 'id_inscripcion');
     }
 }

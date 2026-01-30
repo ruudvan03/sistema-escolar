@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request; 
+
+// Importación de Controladores
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PermisoController;
 use App\Http\Controllers\UserController;
@@ -13,20 +15,27 @@ use App\Http\Controllers\GradoController;
 use App\Http\Controllers\AsistenciaController;
 use App\Http\Controllers\InscripcionController;
 use App\Http\Controllers\GrupoController;
+use App\Http\Controllers\CalificacionController;
+use App\Http\Controllers\AsignacionDocenteController;
 
-// --- 1. RUTA PÚBLICA (Landing) ---
+/*
+|--------------------------------------------------------------------------
+| Web Routes - Sistema Escolar Preparatoria
+|--------------------------------------------------------------------------
+*/
+
+// --- 1. RUTA PÚBLICA (Landing Page) ---
 Route::get('/', function () {
     return view('landing');
 })->name('landing');
 
-// --- 2. AUTENTICACIÓN ---
-// 'register' => false impide registro público
-Auth::routes(['register' => false]);
+// --- 2. AUTENTICACIÓN (UI de Laravel) ---
+Auth::routes(['register' => false]); // Desactivar registro público por seguridad
 
 // --- 3. RUTAS PROTEGIDAS (Requieren Login) ---
 Route::middleware(['auth'])->group(function () {
     
-    // --- ACCESO GENERAL (Cualquier usuario logueado) ---
+    // Acceso General (Dashboard unificado)
     Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
     Route::get('/home', [HomeController::class, 'index'])->name('home');
 
@@ -35,49 +44,51 @@ Route::middleware(['auth'])->group(function () {
     // =========================================================
     Route::middleware(['role:Administrador'])->group(function () {
         
-        // Gestión de Usuarios y Roles
+        // Gestión de Usuarios del Sistema
         Route::resource('users', UserController::class);
         
-        // Rutas manuales de Roles (PermisoController)
+        // Control de Roles y Permisos
         Route::get('/roles', [PermisoController::class, 'roles'])->name('roles.index');
         Route::post('/roles', [PermisoController::class, 'storeRole'])->name('roles.store');
         Route::get('/roles/{id_rol}/permisos', [PermisoController::class, 'edit'])->name('roles.permisos');
         Route::post('/roles/{id_rol}/permisos', [PermisoController::class, 'update'])->name('roles.permisos.update');
 
-        // Gestión Académica (Estructura)
+        // Configuración Académica (Catálogos)
         Route::resource('maestros', MaestroController::class);
         Route::resource('alumnos', AlumnoController::class); 
         Route::resource('materias', MateriaController::class);
         Route::resource('grados', GradoController::class);
+        Route::resource('grupos', GrupoController::class);
+        
+        // Control Operativo
         Route::resource('inscripciones', InscripcionController::class);
-        Route::resource('grupos', GrupoController::class);    
-        });
+        Route::resource('asignaciones', AsignacionDocenteController::class);
+    });
 
     // =========================================================
     //    ZONA COMPARTIDA (Administradores y Maestros)
     // =========================================================
-    // Aquí irán las calificaciones porque ambos necesitan gestionarlas
     Route::middleware(['role:Administrador,Maestro'])->group(function () {
         
-    // Módulo de Asistencias
+        // Módulo de Asistencias (Pase de lista diario)
         Route::resource('asistencias', AsistenciaController::class)->only(['index', 'create', 'store']);
         
-        // Aún no hemos creado este controlador, pero dejaremos la ruta lista
-        // para cuando hagamos el paso de calificaciones.
-        // Route::resource('calificaciones', CalificacionController::class);
+        // Módulo de Calificaciones (Lógica de 3 Parciales / 18 Puntos)
+        Route::get('/calificaciones', [CalificacionController::class, 'index'])->name('calificaciones.index');
+        Route::post('/calificaciones', [CalificacionController::class, 'store'])->name('calificaciones.store');
     });
 
     // =========================================================
-    //    ZONA ALUMNO (Solo rol: Alumno/Tutor)
+    //    ZONA ALUMNO / TUTOR (Solo su información personal)
     // =========================================================
     Route::middleware(['role:Alumno/Tutor'])->group(function () {
-        // Aquí pondremos la ruta para ver sus propias notas
-        // Route::get('/mis-calificaciones', [AlumnoController::class, 'misCalificaciones'])->name('alumno.calificaciones');
+        // Consulta de Boleta Digital (Progreso hacia los 18 puntos)
+        Route::get('/mi-boleta', [CalificacionController::class, 'showStudentBoleta'])->name('alumno.boleta');
     });
 
 });
 
-// --- 4. RUTA DE LOGOUT ---
+// --- 4. CERRAR SESIÓN ---
 Route::post('/logout', function (Request $request) {
     Auth::logout();
     $request->session()->invalidate();
