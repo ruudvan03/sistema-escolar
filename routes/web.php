@@ -29,8 +29,8 @@ Route::get('/', function () {
     return view('landing');
 })->name('landing');
 
-// --- 2. AUTENTICACIÓN (UI de Laravel) ---
-Auth::routes(['register' => false]); // Desactivar registro público por seguridad
+// --- 2. AUTENTICACIÓN ---
+Auth::routes(['register' => false]); 
 
 // --- 3. RUTAS PROTEGIDAS (Requieren Login) ---
 Route::middleware(['auth'])->group(function () {
@@ -64,7 +64,10 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('inscripciones', InscripcionController::class);
         Route::resource('asignaciones', AsignacionDocenteController::class);
 
-        // Gestión de Estados de Parciales (Añadido para el control de periodos)
+        // --- CAMBIO AQUÍ: GESTIÓN DE PERIODOS (Cierre de Parciales) ---
+        // Ruta para ver la lista de parciales y su estatus
+        Route::get('/configuracion/parciales', [CalificacionController::class, 'parcialesIndex'])->name('parciales.index');
+        // Ruta para abrir/cerrar un parcial (usamos POST o PATCH para mayor seguridad)
         Route::post('/parciales/{id}/toggle-status', [CalificacionController::class, 'toggleParcialStatus'])->name('parciales.toggle');
     });
 
@@ -73,22 +76,19 @@ Route::middleware(['auth'])->group(function () {
     // =========================================================
     Route::middleware(['role:Administrador,Maestro'])->group(function () {
         
-        // Módulo de Asistencias (Pase de lista diario)
+        // Módulo de Asistencias
         Route::resource('asistencias', AsistenciaController::class)->only(['index', 'create', 'store']);
         
-        // Módulo de Calificaciones (Lógica de 3 Parciales / 18 Puntos)
+        // Módulo de Calificaciones
         Route::get('/calificaciones', [CalificacionController::class, 'index'])->name('calificaciones.index');
         Route::post('/calificaciones', [CalificacionController::class, 'store'])->name('calificaciones.store');
     });
 
     // =========================================================
-    //    ZONA ALUMNO / TUTOR (Solo su información personal)
+    //    ZONA ALUMNO / TUTOR
     // =========================================================
     Route::middleware(['role:Alumno/Tutor'])->group(function () {
-        // Consulta de Boleta Digital (Progreso hacia los 18 puntos)
         Route::get('/mi-boleta', [CalificacionController::class, 'showStudentBoleta'])->name('alumno.boleta');
-        
-        // Descarga de Boleta en PDF (Añadido para reportes oficiales)
         Route::get('/mi-boleta/descargar', [CalificacionController::class, 'downloadBoletaPDF'])->name('alumno.boleta.pdf');
     });
 

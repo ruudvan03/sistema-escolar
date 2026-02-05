@@ -31,18 +31,34 @@ class Inscripcion extends Model
         return $this->hasMany(Calificacion::class, 'id_inscripcion', 'id_inscripcion');
     }
 
-    /**
-     * Obtiene la materia vinculada a la inscripción a través de las asignaciones del grupo.
-     */
     public function materia()
     {
         return $this->hasOneThrough(
             Materia::class,
             AsignacionDocente::class,
-            'id_grupo',    // FK en AsignacionDocente
-            'id_materia',  // FK en Materia
-            'id_grupo',    // Llave local en Inscripcion
-            'id_materia'   // Llave local en AsignacionDocente
+            'id_grupo', 
+            'id_materia', 
+            'id_grupo',  
+            'id_materia'  
         );
+    }
+
+    // ACCESOR PARA EL PROMEDIO (Optimizado)
+    public function getPromedioAttribute()
+    {
+        // Usamos las calificaciones ya cargadas en memoria
+        $notas = $this->calificaciones;
+
+        if (!$notas || $notas->isEmpty()) {
+            return 0.0;
+        }
+
+        // Filtramos en la colección de PHP, no en la BD
+        $p1 = $notas->firstWhere('id_parcial', 1)->calificacion ?? 0;
+        $p2 = $notas->firstWhere('id_parcial', 2)->calificacion ?? 0;
+        $p3 = $notas->firstWhere('id_parcial', 3)->calificacion ?? 0;
+
+        $resultado = ($p1 + $p2 + $p3) / 3;
+        return round($resultado, 1);
     }
 }
