@@ -18,11 +18,6 @@ use App\Http\Controllers\GrupoController;
 use App\Http\Controllers\CalificacionController;
 use App\Http\Controllers\AsignacionDocenteController;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes - Sistema Escolar Preparatoria
-|--------------------------------------------------------------------------
-*/
 
 // --- 1. RUTA PÚBLICA (Landing Page) ---
 Route::get('/', function () {
@@ -64,10 +59,10 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('inscripciones', InscripcionController::class);
         Route::resource('asignaciones', AsignacionDocenteController::class);
 
-        // --- CAMBIO AQUÍ: GESTIÓN DE PERIODOS (Cierre de Parciales) ---
+        // GESTIÓN DE PERIODOS (Cierre de Parciales)
         // Ruta para ver la lista de parciales y su estatus
         Route::get('/configuracion/parciales', [CalificacionController::class, 'parcialesIndex'])->name('parciales.index');
-        // Ruta para abrir/cerrar un parcial (usamos POST o PATCH para mayor seguridad)
+        // Ruta para abrir/cerrar un parcial
         Route::post('/parciales/{id}/toggle-status', [CalificacionController::class, 'toggleParcialStatus'])->name('parciales.toggle');
     });
 
@@ -88,8 +83,11 @@ Route::middleware(['auth'])->group(function () {
     //    ZONA ALUMNO / TUTOR
     // =========================================================
     Route::middleware(['role:Alumno/Tutor'])->group(function () {
-        Route::get('/mi-boleta', [CalificacionController::class, 'showStudentBoleta'])->name('alumno.boleta');
-        Route::get('/mi-boleta/descargar', [CalificacionController::class, 'downloadBoletaPDF'])->name('alumno.boleta.pdf');
+        // MODIFICACIÓN: Ahora el AlumnoController gestiona la boleta web y el PDF
+        // Vista de consulta rápida en el navegador
+        Route::get('/mi-boleta', [AlumnoController::class, 'verBoleta'])->name('alumno.boleta');
+        // Generación y descarga del documento oficial en PDF
+        Route::get('/mi-boleta/descargar', [AlumnoController::class, 'descargarPDF'])->name('alumno.boleta.pdf');
     });
 
 });

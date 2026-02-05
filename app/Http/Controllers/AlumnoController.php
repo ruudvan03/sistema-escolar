@@ -4,11 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\Alumno;
 use App\Models\User;
-use App\Models\Role; 
+use App\Models\Role;
+use App\Models\Inscripcion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
+use Barryvdh\DomPDF\Facade\Pdf; // Asegúrate de tener instalada la librería dompdf
 
 class AlumnoController extends Controller
 {
@@ -48,9 +51,6 @@ class AlumnoController extends Controller
 
         try {
             DB::transaction(function () use ($request) {
-                
-                
-                // Buscamos el rol "Alumno/Tutor"
                 $rolAlumno = Role::where('nombre_rol', 'Alumno/Tutor')->first();
                 
                 if (!$rolAlumno) {
@@ -61,15 +61,13 @@ class AlumnoController extends Controller
                     throw new \Exception("ERROR CRÍTICO: No se encontró el rol 'Alumno/Tutor' en la base de datos.");
                 }
 
-                // Crear Usuario
                 $user = User::create([
                     'name' => $request->nombre . ' ' . $request->apellido_p,
                     'email' => $request->correo,
                     'password' => Hash::make($request->password),
-                    'id_rol' => $rolAlumno->id_rol, // Asignamos el ID encontrado
+                    'id_rol' => $rolAlumno->id_rol,
                 ]);
 
-                // Crear Alumno
                 Alumno::create([
                     'matricula' => $request->matricula,
                     'nombre' => $request->nombre,
@@ -90,6 +88,51 @@ class AlumnoController extends Controller
             return back()->withErrors(['error' => 'Error al guardar: ' . $e->getMessage()])->withInput();
         }
     }
+
+    // --- NUEVAS FUNCIONES PARA BOLETA (WEB Y PDF) ---
+
+    /**
+     * Muestra la boleta detallada en el navegador (Vista Web)
+     */
+    public function verBoleta()
+    {
+        $user = Auth::user();
+        $alumno = Alumno::where('user_id', $user->id)->firstOrFail();
+
+        // Cargamos la inscripción con todas las materias (asignaciones) y sus notas
+        $inscripciones = Inscripcion::with([
+            'asignacionesDelGrupo.materia', 
+            'asignacionesDelGrupo.maestro',
+            'calificaciones'
+        ])
+        ->where('id_alumno', $alumno->id_alumno)
+        ->get();
+
+        return view('alumnos.boleta', compact('alumno', 'inscripciones'));
+    }
+
+    /**
+     * Genera y descarga el archivo oficial (Vista PDF)
+     */
+    public function descargarPDF()
+    {
+        $user = Auth::user();
+        $alumno = Alumno::where('user_id', $user->id)->firstOrFail();
+
+        $inscripciones = Inscripcion::with([
+            'asignacionesDelGrupo.materia', 
+            'calificaciones'
+        ])
+        ->where('id_alumno', $alumno->id_alumno)
+        ->get();
+
+        // Cargamos una vista simplificada optimizada para PDF
+        $pdf = Pdf::loadView('alumnos.boleta_pdf', compact('alumno', 'inscripciones'));
+        
+        return $pdf->download('Boleta_'.$alumno->matricula.'.pdf');
+    }
+
+    // --- FUNCIONES DE EDICIÓN Y ELIMINACIÓN ---
 
     public function edit($id)
     {

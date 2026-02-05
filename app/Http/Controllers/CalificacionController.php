@@ -7,12 +7,17 @@ use App\Models\Inscripcion;
 use App\Models\AsignacionDocente;
 use App\Models\Maestro;
 use App\Models\Alumno;
-use App\Models\Parcial; // Asegúrate de tener este modelo creado
+use App\Models\Parcial;
+// Importamos la librería para el PDF
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class CalificacionController extends Controller
 {
+    /**
+     * Muestra el panel de captura para maestros y administradores.
+     */
     public function index(Request $request) 
     {
         $user = Auth::user();
@@ -31,7 +36,7 @@ class CalificacionController extends Controller
         $asignacion_id = $request->id_asignacion;
         $parcial_id = $request->id_parcial ?? 1;
 
-        // Recuperamos el estado del parcial seleccionado
+        // Recuperamos el parcial para validar estatus en la vista
         $parcialSeleccionado = Parcial::find($parcial_id);
 
         if ($asignacion_id) {
@@ -46,6 +51,9 @@ class CalificacionController extends Controller
         return view('calificaciones.index', compact('misAsignaciones', 'alumnos', 'asignacion_id', 'parcial_id', 'parcialSeleccionado'));
     }
 
+    /**
+     * Guarda las calificaciones verificando que el parcial esté 'abierto'.
+     */
     public function store(Request $request) 
     {
         $request->validate([
@@ -55,9 +63,10 @@ class CalificacionController extends Controller
             'notas.*' => 'nullable|numeric|between:0,10',
         ]);
 
-        // Verificación de estatus para bloquear edición
         $parcial = Parcial::findOrFail($request->id_parcial);
-        if (!$parcial->estatus) {
+        
+        // Verificación contra los valores exactos de tu SQL ('abierto' vs '0')
+        if ($parcial->estatus !== 'abierto') {
             return back()->with('error', 'El parcial seleccionado está cerrado y no permite ediciones.');
         }
 
@@ -79,33 +88,68 @@ class CalificacionController extends Controller
         return back()->with('success', 'Calificaciones actualizadas correctamente.');
     }
 
-    // --- NUEVO MÉTODO: Muestra la lista de parciales para el Administrador ---
+    /**
+     * Muestra la boleta digital con todas las materias del alumno.
+     */
+    public function showStudentBoleta() 
+    {
+        $user = Auth::user();
+        $alumno = Alumno::where('user_id', $user->id)->firstOrFail();
+
+        // Relación corregida para traer la lista completa de materias
+        $inscripciones = Inscripcion::with([
+            'asignacionesDelGrupo.materia', 
+            'asignacionesDelGrupo.maestro',
+            'calificaciones'
+        ])
+        ->where('id_alumno', $alumno->id_alumno)
+        ->get();
+
+        return view('alumnos.boleta', compact('alumno', 'inscripciones'));
+    }
+
+    /**
+     * Genera el PDF de la boleta con el nuevo diseño.
+     */
+    public function downloadBoletaPDF()
+    {
+        $user = Auth::user();
+        $alumno = Alumno::where('user_id', $user->id)->firstOrFail();
+
+        $inscripciones = Inscripcion::with([
+            'asignacionesDelGrupo.materia', 
+            'calificaciones'
+        ])
+        ->where('id_alumno', $alumno->id_alumno)
+        ->get();
+
+        // Se usa la vista 'alumnos.boleta_pdf' para el renderizado del documento
+        $pdf = Pdf::loadView('alumnos.boleta_pdf', compact('alumno', 'inscripciones'));
+        
+        return $pdf->download('Boleta_'.$alumno->matricula.'.pdf');
+    }
+
+    /**
+     * Gestión de parciales para el administrador.
+     */
     public function parcialesIndex()
     {
         $parciales = Parcial::all();
         return view('calificaciones.parciales_config', compact('parciales'));
     }
 
-    // Método para cambiar el estatus (Abrir/Cerrar)
+    /**
+     * Cambia el estatus entre 'abierto' y '0'.
+     */
     public function toggleParcialStatus($id)
     {
         $parcial = Parcial::findOrFail($id);
-        $parcial->estatus = !$parcial->estatus;
+        
+        // Alternamos usando tus valores de BD
+        $parcial->estatus = ($parcial->estatus === 'abierto') ? '0' : 'abierto';
         $parcial->save();
 
-        $mensaje = $parcial->estatus ? 'abierto' : 'cerrado';
-        return back()->with('success', "El parcial {$parcial->nombre_parcial} ahora está {$mensaje}.");
-    }
-
-    public function showStudentBoleta() 
-    {
-        $user = Auth::user();
-        $alumno = Alumno::where('user_id', $user->id)->firstOrFail();
-
-        $inscripciones = Inscripcion::with(['materia', 'calificaciones'])
-            ->where('id_alumno', $alumno->id_alumno)
-            ->get();
-
-        return view('alumnos.boleta', compact('alumno', 'inscripciones'));
+        $estado = ($parcial->estatus === 'abierto') ? 'ABIERTO' : 'CERRADO';
+        return back()->with('success', "El parcial {$parcial->nombre_parcial} ahora está {$estado}.");
     }
 }

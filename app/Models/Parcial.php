@@ -14,10 +14,6 @@ class Parcial extends Model
 
     protected $fillable = [
         'nombre_parcial',
-        'estatus' // Usaremos 1 para abierto y 0 para cerrado
-    ];
-
-    protected $casts = [
-        'estatus' => 'boolean',
+        'estatus'
     ];
 }
