@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('parciales', function (Blueprint $table) {
             $table->id('id_parcial');
             $table->string('nombre_parcial');
+            $table->string('estatus')->default('abierto'); // Esto iguala la BD manual
             $table->timestamps();
         });
     }
