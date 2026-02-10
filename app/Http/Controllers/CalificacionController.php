@@ -8,7 +8,6 @@ use App\Models\AsignacionDocente;
 use App\Models\Maestro;
 use App\Models\Alumno;
 use App\Models\Parcial;
-// Importamos la librería para el PDF
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -52,7 +51,7 @@ class CalificacionController extends Controller
     }
 
     /**
-     * Guarda las calificaciones verificando que el parcial esté 'abierto'.
+     * Guarda las calificaciones verificando rango (0-10) y estatus del parcial.
      */
     public function store(Request $request) 
     {
@@ -60,12 +59,12 @@ class CalificacionController extends Controller
             'id_parcial' => 'required|integer|exists:parciales,id_parcial',
             'id_asignacion' => 'required|exists:asignacion_docente,id_asignacion',
             'notas' => 'required|array',
-            'notas.*' => 'nullable|numeric|between:0,10',
+            // Nueva modificación: Validación estricta de rango entre 0 y 10
+            'notas.*' => 'nullable|numeric|min:0|max:10',
         ]);
 
         $parcial = Parcial::findOrFail($request->id_parcial);
         
-        // Verificación contra los valores exactos de tu SQL ('abierto' vs '0')
         if ($parcial->estatus !== 'abierto') {
             return back()->with('error', 'El parcial seleccionado está cerrado y no permite ediciones.');
         }
@@ -88,15 +87,13 @@ class CalificacionController extends Controller
         return back()->with('success', 'Calificaciones actualizadas correctamente.');
     }
 
-    /**
-     * Muestra la boleta digital con todas las materias del alumno.
-     */
+
     public function showStudentBoleta() 
     {
         $user = Auth::user();
         $alumno = Alumno::where('user_id', $user->id)->firstOrFail();
 
-        // Relación corregida para traer la lista completa de materias
+        // Carga optimizada de materias y calificaciones del grupo del alumno
         $inscripciones = Inscripcion::with([
             'asignacionesDelGrupo.materia', 
             'asignacionesDelGrupo.maestro',
@@ -108,9 +105,6 @@ class CalificacionController extends Controller
         return view('alumnos.boleta', compact('alumno', 'inscripciones'));
     }
 
-    /**
-     * Genera el PDF de la boleta con el nuevo diseño.
-     */
     public function downloadBoletaPDF()
     {
         $user = Auth::user();
@@ -123,29 +117,22 @@ class CalificacionController extends Controller
         ->where('id_alumno', $alumno->id_alumno)
         ->get();
 
-        // Se usa la vista 'alumnos.boleta_pdf' para el renderizado del documento
         $pdf = Pdf::loadView('alumnos.boleta_pdf', compact('alumno', 'inscripciones'));
         
         return $pdf->download('Boleta_'.$alumno->matricula.'.pdf');
     }
 
-    /**
-     * Gestión de parciales para el administrador.
-     */
+
     public function parcialesIndex()
     {
         $parciales = Parcial::all();
         return view('calificaciones.parciales_config', compact('parciales'));
     }
 
-    /**
-     * Cambia el estatus entre 'abierto' y '0'.
-     */
     public function toggleParcialStatus($id)
     {
         $parcial = Parcial::findOrFail($id);
         
-        // Alternamos usando tus valores de BD
         $parcial->estatus = ($parcial->estatus === 'abierto') ? '0' : 'abierto';
         $parcial->save();
 

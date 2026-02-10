@@ -1,84 +1,114 @@
 @extends('layouts.app')
 
-@section('header', 'Mi Expediente Académico')
-
 @section('content')
-<div class="space-y-6">
-    <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200 flex flex-col md:flex-row items-center gap-6">
-        <div class="w-20 h-20 rounded-2xl bg-blue-600 flex items-center justify-center text-white text-3xl font-black shadow-lg shadow-blue-200">
-            {{ substr($alumno->nombre, 0, 1) }}
+<div class="container mx-auto pb-10 px-4">
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+        <div>
+            <h1 class="text-2xl font-black text-slate-800 italic uppercase tracking-tighter">Mi Boleta de Calificaciones</h1>
+            <p class="text-slate-500 text-sm font-medium">Consulta tu rendimiento académico en tiempo real.</p>
         </div>
-        <div class="text-center md:text-left flex-1">
-            <h3 class="text-2xl font-black text-slate-800 uppercase tracking-tighter italic">
-                {{ $alumno->nombre }} {{ $alumno->apellido_p }} {{ $alumno->apellido_m }}
-            </h3>
-            <div class="flex flex-wrap justify-center md:justify-start gap-4 mt-2">
-                <span class="text-[10px] font-black px-3 py-1 bg-slate-100 text-slate-500 rounded-full uppercase tracking-widest border border-slate-200">
-                    Matrícula: {{ $alumno->matricula }}
-                </span>
-                <span class="text-[10px] font-black px-3 py-1 bg-blue-50 text-blue-600 rounded-full uppercase tracking-widest border border-blue-100">
-                    Ciclo: {{ $inscripciones->first()->ciclo_escolar ?? 'N/A' }}
-                </span>
-                <span class="text-[10px] font-black px-3 py-1 bg-emerald-50 text-emerald-600 rounded-full uppercase tracking-widest border border-emerald-100">
-                    Estatus: {{ $alumno->estatus }}
-                </span>
-            </div>
-        </div>
-        <a href="{{ route('alumno.boleta.pdf') }}" class="flex items-center gap-2 px-6 py-3 bg-slate-900 text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-blue-600 transition-all shadow-xl shadow-slate-200">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"/></svg>
-            Descargar PDF
+        
+        <a href="{{ route('alumno.boleta.pdf') }}" 
+           class="inline-flex items-center justify-center gap-3 px-6 py-3 bg-red-600 hover:bg-red-700 text-white rounded-2xl transition-all shadow-lg shadow-red-200 active:scale-95 group">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            <span class="text-xs font-black uppercase tracking-widest">Descargar PDF Oficial</span>
         </a>
     </div>
 
-    <div class="bg-white rounded-3xl shadow-xl shadow-slate-200/50 border border-slate-200 overflow-hidden">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+            <p class="text-[10px] font-black uppercase text-slate-400 tracking-widest">Promedio General</p>
+            <div class="flex items-end gap-2 mt-1">
+                <span class="text-4xl font-black text-slate-800 tracking-tighter">
+                    {{ number_format($inscripciones->first()->promedio_general ?? 0, 1) }}
+                </span>
+                <span class="text-xs font-bold text-emerald-500 mb-2 uppercase italic">Global</span>
+            </div>
+        </div>
+
+        <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+            <p class="text-[10px] font-black uppercase text-slate-400 tracking-widest">Materias Inscritas</p>
+            <div class="text-4xl font-black text-slate-800 mt-1 tracking-tighter">
+                {{ $inscripciones->first()->asignacionesDelGrupo->count() ?? 0 }}
+            </div>
+        </div>
+
+        <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+            <p class="text-[10px] font-black uppercase text-slate-400 tracking-widest">Estatus del Ciclo</p>
+            <div class="mt-2">
+                <span class="px-4 py-1.5 bg-emerald-100 text-emerald-700 text-[10px] font-black rounded-full uppercase tracking-tight">
+                    Alumno Regular
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden">
         <div class="overflow-x-auto">
             <table class="w-full text-left border-collapse">
                 <thead>
                     <tr class="bg-slate-50 border-b border-slate-200">
-                        <th class="px-8 py-5 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Asignatura / Docente</th>
-                        <th class="px-4 py-5 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 text-center border-x border-slate-100">Parcial 1</th>
-                        <th class="px-4 py-5 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 text-center border-x border-slate-100">Parcial 2</th>
-                        <th class="px-4 py-5 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 text-center border-x border-slate-100">Parcial 3</th>
-                        <th class="px-8 py-5 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 text-center">Promedio Final</th>
+                        <th class="px-8 py-5 text-[10px] font-black uppercase text-slate-400">Asignatura / Docente</th>
+                        <th class="px-4 py-5 text-[10px] font-black uppercase text-slate-400 text-center border-x border-slate-100/50">Parcial 1</th>
+                        <th class="px-4 py-5 text-[10px] font-black uppercase text-slate-400 text-center border-x border-slate-100/50">Parcial 2</th>
+                        <th class="px-4 py-5 text-[10px] font-black uppercase text-slate-400 text-center border-x border-slate-100/50">Parcial 3</th>
+                        <th class="px-8 py-5 text-[10px] font-black uppercase text-slate-400 text-center">Final</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100">
-                    @foreach($inscripciones as $inscripcion)
+                    @forelse($inscripciones as $inscripcion)
                         @foreach($inscripcion->asignacionesDelGrupo as $asig)
                             @php
-                                $n1 = $inscripcion->calificaciones->where('id_asignacion', $asig->id_asignacion)->where('id_parcial', 1)->first()->calificacion ?? 0;
-                                $n2 = $inscripcion->calificaciones->where('id_asignacion', $asig->id_asignacion)->where('id_parcial', 2)->first()->calificacion ?? 0;
-                                $n3 = $inscripcion->calificaciones->where('id_asignacion', $asig->id_asignacion)->where('id_parcial', 3)->first()->calificacion ?? 0;
+                                $p1 = $inscripcion->calificaciones->where('id_asignacion', $asig->id_asignacion)->where('id_parcial', 1)->first();
+                                $p2 = $inscripcion->calificaciones->where('id_asignacion', $asig->id_asignacion)->where('id_parcial', 2)->first();
+                                $p3 = $inscripcion->calificaciones->where('id_asignacion', $asig->id_asignacion)->where('id_parcial', 3)->first();
                                 
-                                $promedio = ($n1 + $n2 + $n3) / 3;
+                                $n1 = $p1 ? $p1->calificacion : null;
+                                $n2 = $p2 ? $p2->calificacion : null;
+                                $n3 = $p3 ? $p3->calificacion : null;
+
+                                $promedio = ($n1 !== null && $n2 !== null && $n3 !== null) ? ($n1 + $n2 + $n3) / 3 : null;
                             @endphp
-                            <tr class="hover:bg-blue-50/30 transition-colors group">
+                            <tr class="hover:bg-slate-50/50 transition-colors group">
                                 <td class="px-8 py-5">
-                                    <div class="font-black text-slate-700 group-hover:text-blue-600 transition-colors italic uppercase tracking-tighter">
+                                    <div class="font-black text-slate-700 italic uppercase tracking-tighter text-base group-hover:text-blue-600 transition-colors">
                                         {{ $asig->materia->nombre_materia }}
                                     </div>
-                                    <div class="text-[10px] font-bold text-slate-400 uppercase mt-1">
-                                        Prof. {{ $asig->maestro->nombre ?? 'Por asignar' }}
+                                    <div class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-0.5">
+                                        {{ $asig->maestro->nombre ?? 'Docente no asignado' }}
                                     </div>
                                 </td>
-                                <td class="px-4 py-5 text-center border-x border-slate-100 font-bold text-slate-600 italic">
-                                    {{ $n1 ?: '-' }}
+                                
+                                <td class="px-4 py-5 text-center font-bold text-slate-600 border-x border-slate-50">
+                                    {!! $n1 !== null ? number_format($n1, 1) : '<span class="text-slate-300 font-medium text-[9px] uppercase tracking-tighter italic">Pendiente</span>' !!}
                                 </td>
-                                <td class="px-4 py-5 text-center border-x border-slate-100 font-bold text-slate-600 italic">
-                                    {{ $n2 ?: '-' }}
+                                <td class="px-4 py-5 text-center font-bold text-slate-600 border-x border-slate-50">
+                                    {!! $n2 !== null ? number_format($n2, 1) : '<span class="text-slate-300 font-medium text-[9px] uppercase tracking-tighter italic">Pendiente</span>' !!}
                                 </td>
-                                <td class="px-4 py-5 text-center border-x border-slate-100 font-bold text-slate-600 italic">
-                                    {{ $n3 ?: '-' }}
+                                <td class="px-4 py-5 text-center font-bold text-slate-600 border-x border-slate-50">
+                                    {!! $n3 !== null ? number_format($n3, 1) : '<span class="text-slate-300 font-medium text-[9px] uppercase tracking-tighter italic">Pendiente</span>' !!}
                                 </td>
+                                
                                 <td class="px-8 py-5 text-center">
-                                    <div class="inline-flex items-center justify-center w-12 h-12 rounded-2xl font-black text-sm shadow-inner 
-                                        {{ $promedio < 6 ? 'bg-red-50 text-red-500 border border-red-100' : 'bg-emerald-50 text-emerald-600 border border-emerald-100' }}">
-                                        {{ number_format($promedio, 1) }}
-                                    </div>
+                                    @if($promedio !== null)
+                                        <span class="inline-flex items-center justify-center w-12 h-8 rounded-xl font-black text-xs shadow-sm {{ $promedio < 6 ? 'bg-red-50 text-red-600 border border-red-100' : 'bg-indigo-50 text-indigo-600 border border-indigo-100' }}">
+                                            {{ number_format($promedio, 1) }}
+                                        </span>
+                                    @else
+                                        <span class="px-3 py-1 bg-slate-100 text-slate-400 text-[9px] font-black uppercase rounded-lg tracking-tighter">En curso</span>
+                                    @endif
                                 </td>
                             </tr>
                         @endforeach
-                    @endforeach
+                    @empty
+                        <tr>
+                            <td colspan="5" class="px-8 py-20 text-center">
+                                <p class="text-slate-400 font-black uppercase tracking-widest text-sm italic">No se encontraron inscripciones activas.</p>
+                            </td>
+                        </tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>

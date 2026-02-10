@@ -17,7 +17,13 @@ use App\Http\Controllers\InscripcionController;
 use App\Http\Controllers\GrupoController;
 use App\Http\Controllers\CalificacionController;
 use App\Http\Controllers\AsignacionDocenteController;
+use App\Http\Controllers\OrientadorController;
 
+/*
+|--------------------------------------------------------------------------
+| Web Routes - Sistema Escolar Preparatoria
+|--------------------------------------------------------------------------
+*/
 
 // --- 1. RUTA PÚBLICA (Landing Page) ---
 Route::get('/', function () {
@@ -53,40 +59,44 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('alumnos', AlumnoController::class); 
         Route::resource('materias', MateriaController::class);
         Route::resource('grados', GradoController::class);
+        
+        // Gestión de Grupos y Asignación de Orientadores
         Route::resource('grupos', GrupoController::class);
+        // Ruta específica para actualizar solo el orientador desde el edit de grupos
+        Route::patch('/grupos/{id}/orientador', [GrupoController::class, 'update'])->name('grupos.update_orientador');
         
         // Control Operativo
         Route::resource('inscripciones', InscripcionController::class);
         Route::resource('asignaciones', AsignacionDocenteController::class);
 
         // GESTIÓN DE PERIODOS (Cierre de Parciales)
-        // Ruta para ver la lista de parciales y su estatus
         Route::get('/configuracion/parciales', [CalificacionController::class, 'parcialesIndex'])->name('parciales.index');
-        // Ruta para abrir/cerrar un parcial
         Route::post('/parciales/{id}/toggle-status', [CalificacionController::class, 'toggleParcialStatus'])->name('parciales.toggle');
     });
 
     // =========================================================
-    //    ZONA COMPARTIDA (Administradores y Maestros)
+    //    ZONA COMPARTIDA (Administradores, Maestros y Orientadores)
     // =========================================================
-    Route::middleware(['role:Administrador,Maestro'])->group(function () {
+    Route::middleware(['role:Administrador,Maestro,Orientador'])->group(function () {
         
-        // Módulo de Asistencias
+        // Módulo de Asistencias por Materia (Docentes)
         Route::resource('asistencias', AsistenciaController::class)->only(['index', 'create', 'store']);
         
         // Módulo de Calificaciones
         Route::get('/calificaciones', [CalificacionController::class, 'index'])->name('calificaciones.index');
         Route::post('/calificaciones', [CalificacionController::class, 'store'])->name('calificaciones.store');
+
+        // --- MÓDULO DE ORIENTACIÓN (Asistencia General) ---
+        // Acceso para que el Orientador pase lista a sus grupos asignados
+        Route::get('/orientacion/pase-lista', [OrientadorController::class, 'index'])->name('orientador.index');
+        Route::post('/orientacion/pase-lista', [OrientadorController::class, 'store'])->name('orientador.store');
     });
 
     // =========================================================
     //    ZONA ALUMNO / TUTOR
     // =========================================================
     Route::middleware(['role:Alumno/Tutor'])->group(function () {
-        // MODIFICACIÓN: Ahora el AlumnoController gestiona la boleta web y el PDF
-        // Vista de consulta rápida en el navegador
         Route::get('/mi-boleta', [AlumnoController::class, 'verBoleta'])->name('alumno.boleta');
-        // Generación y descarga del documento oficial en PDF
         Route::get('/mi-boleta/descargar', [AlumnoController::class, 'descargarPDF'])->name('alumno.boleta.pdf');
     });
 

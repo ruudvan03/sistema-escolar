@@ -13,6 +13,7 @@ class RolSeeder extends Seeder
             ['nombre_rol' => 'Administrador'],
             ['nombre_rol' => 'Maestro'],
             ['nombre_rol' => 'Alumno / Tutor'],
+            ['nombre_rol' => 'Orientador'],
         ]);
     }
 }

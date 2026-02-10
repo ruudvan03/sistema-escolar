@@ -48,11 +48,20 @@ class User extends Authenticatable
 
     /**
      * Relación: Un Usuario pertenece a un Rol.
+     * NOTA: Se cambió de 'rol' a 'role' para que funcione el whereHas('role') del controlador.
      */
-    public function rol()
+    public function role()
     {
         // belongsTo(Modelo, 'llave_foranea_en_users', 'llave_primaria_en_roles')
         return $this->belongsTo(Role::class, 'id_rol', 'id_rol');
+    }
+
+    /**
+     * Relación: Un Orientador (Usuario) puede tener varios grupos a su cargo.
+     */
+    public function grupos()
+    {
+        return $this->hasMany(Grupo::class, 'id_orientador', 'id');
     }
 
     // ==========================================
@@ -64,10 +73,11 @@ class User extends Authenticatable
      */
     public function hasRole($roleName)
     {
-        if (!$this->rol) {
+        // Se usa la relación 'role' corregida
+        if (!$this->role) {
             return false;
         }
-        return $this->rol->nombre_rol === $roleName;
+        return $this->role->nombre_rol === $roleName;
     }
 
     /**
@@ -75,9 +85,10 @@ class User extends Authenticatable
      */
     public function hasAnyRole(array $roles)
     {
-        if (!$this->rol) {
+        // Se usa la relación 'role' corregida
+        if (!$this->role) {
             return false;
         }
-        return in_array($this->rol->nombre_rol, $roles);
+        return in_array($this->role->nombre_rol, $roles);
     }
 }
