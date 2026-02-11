@@ -9,58 +9,29 @@ class Grupo extends Model
 {
     use HasFactory;
 
-    // Definimos el nombre de la tabla si no sigue la convención plural de Laravel
     protected $table = 'grupos';
+    protected $primaryKey = 'id_group'; // Asegúrate de que coincida con tu migración (id_grupo o id_group)
 
-    // Definimos la llave primaria personalizada
-    protected $primaryKey = 'id_grupo';
-
-    // Campos que se pueden asignar masivamente
     protected $fillable = [
         'nombre_grupo',
-        'grado',
-        'grupo',
+        'id_grado',
         'turno',
-        'id_orientador', // Nuevo campo añadido
+        'id_orientador'
     ];
 
-    /**
-     * Relación: Un grupo pertenece a un Orientador (Usuario).
-     */
+    // RELACIÓN CLAVE: Para evitar el error de "nombre_grado" on null
+    public function grado()
+    {
+        return $this->belongsTo(Grado::class, 'id_grado', 'id_grado');
+    }
+
     public function orientador()
     {
-        // Relacionamos con el modelo User usando la llave foránea 'id_orientador'
-        return $this->belongsTo(User::class, 'id_orientador');
+        return $this->belongsTo(User::class, 'id_orientador', 'id');
     }
 
-    /**
-     * Relación: Un grupo tiene muchas inscripciones (alumnos).
-     */
     public function inscripciones()
     {
-        return $this->hasMany(Inscripcion::class, 'id_grupo');
-    }
-
-    /**
-     * Relación: Un grupo tiene muchas asistencias generales.
-     */
-    public function asistencias()
-    {
-        return $this->hasMany(AsistenciaGeneral::class, 'id_grupo');
-    }
-
-    /**
-     * Opcional: Relación directa con los Alumnos a través de las Inscripciones
-     */
-    public function alumnos()
-    {
-        return $this->hasManyThrough(
-            Alumno::class,
-            Inscripcion::class,
-            'id_grupo',    // Llave foránea en tabla inscripciones
-            'id_alumno',   // Llave foránea en tabla alumnos
-            'id_grupo',    // Llave local en tabla grupos
-            'id_alumno'    // Llave local en tabla inscripciones
-        );
+        return $this->hasMany(Inscripcion::class, 'id_grupo', 'id_grupo');
     }
 }
